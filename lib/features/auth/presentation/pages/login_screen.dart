@@ -1,0 +1,84 @@
+import 'package:blogapp/core/themes/app-palette.dart';
+import 'package:blogapp/features/auth/presentation/pages/signup_screen.dart';
+import 'package:blogapp/features/auth/presentation/widgets/auth_field.dart';
+import 'package:blogapp/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:flutter/material.dart';
+
+class LogInScreen extends StatefulWidget {
+  static route() => MaterialPageRoute(
+        builder: (context) => const LogInScreen(),
+      );
+  const LogInScreen({super.key});
+
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
+  final formKey = GlobalKey<FormState>();
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Sign In",
+                style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 30.0),
+              AuthField(hintText: 'Email', controller: emailController),
+              SizedBox(height: 15.0),
+              AuthField(
+                hintText: 'Password',
+                controller: passwordController,
+                isobscureText: true,
+              ),
+              SizedBox(height: 20.0),
+              AuthGradientButton(
+                ButtonText: "Sign In",
+              ),
+              SizedBox(height: 20.0),
+              GestureDetector(
+                onTap: ()
+                {
+                  Navigator.push(context, SignupScreen.route());
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: "Don't have an account? ",
+                    style: Theme.of(context).textTheme.titleMedium,
+                    children: [
+                      TextSpan(
+                        text: "Sign Up",
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: AppPallete.gradient2,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
