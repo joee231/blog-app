@@ -51,6 +51,11 @@ class _LogInScreenState extends State<LogInScreen> {
               ),
               SizedBox(height: 20.0),
               AuthGradientButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    // Perform login action
+                  }
+                },
                 ButtonText: "Sign In",
               ),
               SizedBox(height: 20.0),
