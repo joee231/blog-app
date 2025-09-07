@@ -1,10 +1,19 @@
+import 'package:blogapp/core/secrets/app_secrets.dart';
 import 'package:blogapp/core/themes/theme.dart';
 import 'package:blogapp/features/auth/presentation/pages/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'features/auth/presentation/pages/signup_screen.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final supabase = await Supabase.initialize
+    (
+      url: AppSecrets.supbaseUrl,
+      anonKey: AppSecrets.supbaseApiKey
+  );
   runApp(const MyApp());
 }
 
