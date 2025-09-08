@@ -20,9 +20,11 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, String>> SignUpWithEmailAndPassword({
     required String name,
-    required String email,
-    required String password,
-  }
 
-  // Implementation of authentication repository
+    required String email,
+
+    required String password,
+  }) {
+    throw UnimplementedError();
+  }
 }

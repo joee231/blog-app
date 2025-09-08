@@ -58,6 +58,11 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 20.0),
               AuthGradientButton(
                 ButtonText: "Sign Up",
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    // Perform signup action
+                  }
+                },
               ),
               SizedBox(height: 20.0),
               GestureDetector(
