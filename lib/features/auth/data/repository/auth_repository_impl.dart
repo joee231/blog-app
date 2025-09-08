@@ -1,4 +1,3 @@
-import 'package:blogapp/core/error/exception.dart';
 import 'package:blogapp/core/error/failure.dart';
 import 'package:fpdart/src/either.dart';
 
@@ -15,7 +14,6 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) {
-
     throw UnimplementedError();
   }
 
@@ -24,17 +22,6 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
     required String email,
     required String password,
-  }) async{
-    try {
-      final userID = await remoteDataSource.SignUpWithEmailAndPassword(
-          name: name,
-          email: email,
-          password: password);
-
-return  Right(userID);  }
-     on ServerException catch (e) {
-      return Left(Failure(e.message));
-    }
   }
 
   // Implementation of authentication repository
