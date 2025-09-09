@@ -25,21 +25,28 @@ class authRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String name,
     required String email,
     required String password}) async {
-    final responce = await supabaseClient.auth.signUp(
-        password: password ,
-        email: email ,
-        data: {'name' : name})
-        .then((value)
-    {
+    try {
+      print('Attempting sign up with email: $email');
+      final value = await supabaseClient.auth.signUp(
+        password: password,
+        email: email,
+        data: {'name': name},
+      );
+      print('Supabase signUp response: user=${value.user}, error=${value.toString()}');
       if (value.user == null) {
-        throw ServerException('Something went wrong');
-      }  
+        throw ServerException(value.toString() ?? 'Something went wrong');
+      }
       return value.user!.id;
-    }).catchError((error)
-    {
-      throw ServerException(error.message);
-    });
-    return responce;
+    } catch (error) {
+      print('Sign up error: $error');
+      if (error is AuthException) {
+        throw ServerException(error.message);
+      } else if (error is ServerException) {
+        throw error;
+      } else {
+        throw ServerException(error.toString());
+      }
+    }
  }
 
 }
