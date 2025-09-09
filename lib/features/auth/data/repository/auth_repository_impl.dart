@@ -1,5 +1,6 @@
 import 'package:blogapp/core/error/failure.dart';
 import 'package:fpdart/src/either.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sp;
 
 import '../../../../core/error/exception.dart';
 import '../../domain/entities/user.dart';
@@ -15,8 +16,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, User>> LogInWithEmailAndPassword({
     required String email,
     required String password,
-  }) {
-    throw UnimplementedError();
+  }) async {
+
+     return _getUser(() async => await remoteDataSource.LogInWithEmailAndPassword(
+       email: email,
+       password: password,
+     ),
+     );
   }
 
   @override
@@ -25,16 +31,25 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
-      final uid = await remoteDataSource.SignUpWithEmailAndPassword(
+      return _getUser(()  async => await remoteDataSource.SignUpWithEmailAndPassword(
         name: name,
         email: email,
         password: password,
-      );
-      return Right(uid);
-    } on ServerException catch (e) {
+      ),);
+
+  }
+  Future<Either<Failure, User>> _getUser
+      (
+      Future<User> Function() fn
+      ) async
+  {
+    try {
+      final user = await fn();
+      return Right(user);
+    } on sp.AuthException catch (e) {
       return Left(Failure(e.message));
-    } catch (e) {
+    }
+    on ServerException catch (e) {
       return Left(Failure(e.toString()));
     }
   }

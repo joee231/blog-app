@@ -16,9 +16,28 @@ class authRemoteDataSourceImpl implements AuthRemoteDataSource {
   final SupabaseClient supabaseClient;
   authRemoteDataSourceImpl({required this.supabaseClient});
   @override
-  Future<UserModel> LogInWithEmailAndPassword({required String email, required String password}) {
-    // TODO: implement LogInWithEmailAndPassword
-    throw UnimplementedError();
+  Future<UserModel> LogInWithEmailAndPassword({required String email, required String password}) async {
+     try {
+    print('Attempting log in with email: $email');
+    final value = await supabaseClient.auth.signInWithPassword(
+    password: password,
+    email: email,
+    );
+    print('Supabase sign in response: user=${value.user}, error=${value.toString()}');
+    if (value.user == null) {
+    throw ServerException(value.toString() ?? 'Something went wrong');
+    }
+    return UserModel.fromJson(value.user!.toJson());
+    } catch (error) {
+    print('Sign up error: $error');
+    if (error is AuthException) {
+    throw ServerException(error.message);
+    } else if (error is ServerException) {
+    throw error;
+    } else {
+    throw ServerException(error.toString());
+    }
+  }
   }
 
   @override
