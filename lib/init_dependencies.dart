@@ -1,4 +1,6 @@
+import 'package:blogapp/core/cubits/app_user/app_user_cubit.dart';
 import 'package:blogapp/features/auth/data/repository/auth_repository_impl.dart';
+import 'package:blogapp/features/auth/domain/usecases/current_user.dart';
 import 'package:blogapp/features/auth/domain/usecases/user_log_in.dart';
 import 'package:blogapp/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blogapp/features/auth/presentation/bloc/auth_bloc.dart';
@@ -18,6 +20,8 @@ Future<void> initDependencies() async {
     anonKey: AppSecrets.supbaseApiKey,
   );
   serviceLocator.registerLazySingleton<SupabaseClient>(() => supabase.client);
+  
+  serviceLocator.registerLazySingleton(() => AppUserCubit());
   // Bloc/Cubit
 
   // UseCases
@@ -28,22 +32,22 @@ Future<void> initDependencies() async {
 }
 
 void _initAuth() {
-  serviceLocator.registerFactory<AuthRemoteDataSource>(
-    () => authRemoteDataSourceImpl(supabaseClient: serviceLocator()),
-  );
-
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(remoteDataSource: serviceLocator()),
-  );
-
-  serviceLocator.registerFactory(
-    () => UserSignUp(authRepository: serviceLocator()),
-  );
-  serviceLocator.registerFactory(
-    () => UserLogin(authRepository: serviceLocator()),
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => AuthBloc(userSignUp: serviceLocator(), userLogin: serviceLocator()),
-  );
+  serviceLocator
+    ..registerFactory<AuthRemoteDataSource>(
+      () => authRemoteDataSourceImpl(supabaseClient: serviceLocator()),
+    )
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(remoteDataSource: serviceLocator()),
+    )
+    ..registerFactory(() => UserSignUp(authRepository: serviceLocator()))
+    ..registerFactory(() => UserLogin(authRepository: serviceLocator()))
+    ..registerFactory(() => CurrentUser(serviceLocator()))
+    ..registerLazySingleton(
+      () => AuthBloc(
+        userSignUp: serviceLocator(),
+        userLogin: serviceLocator(),
+        currentUser: serviceLocator(),
+        appUserCubit: serviceLocator(),
+      ),
+    );
 }

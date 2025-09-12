@@ -1,4 +1,4 @@
-import 'package:blogapp/features/auth/domain/entities/user.dart';
+import '../../../../core/entities/user.dart';
 import 'package:fpdart/fpdart.dart';
 
 import '../../../../core/error/failure.dart';
@@ -16,4 +16,6 @@ Future<Either<Failure, User>> LogInWithEmailAndPassword(
       required String email,
       required String password
     });
+
+Future<Either<Failure , User>> currentUser();
 }

@@ -3,7 +3,7 @@ import 'package:fpdart/src/either.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sp;
 
 import '../../../../core/error/exception.dart';
-import '../../domain/entities/user.dart';
+import '../../../../core/entities/user.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
 
@@ -11,6 +11,22 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
 
   const AuthRepositoryImpl({required this.remoteDataSource});
+
+  @override
+  Future<Either<Failure, User>> currentUser() async {
+    try
+    {
+      final user = await remoteDataSource.getCurrentUserData();
+      if (user == null) {
+        return left(Failure('User not logged in'));
+      }
+      return right(user);
+    } on ServerException catch (e)
+    {
+      return left(Failure(e.message));
+    }
+
+  }
 
   @override
   Future<Either<Failure, User>> LogInWithEmailAndPassword({
@@ -53,4 +69,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+
 }
