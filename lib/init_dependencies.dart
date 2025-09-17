@@ -14,6 +14,7 @@ import 'features/auth/domain/repository/auth_repository.dart';
 import 'features/blog/data/datasources/blog_remote_data_source.dart';
 import 'features/blog/data/repositories/blog_repository_impl.dart';
 import 'features/blog/domain/repositories/blog_repository.dart';
+import 'features/blog/domain/usecases/get_all_blogs.dart';
 import 'features/blog/domain/usecases/upload_blog.dart';
 
 final serviceLocator = GetIt.instance;
@@ -67,5 +68,9 @@ void _initBlog() {
       () => BlogRepositoryImpl(serviceLocator()),
     )
     ..registerFactory(() => uploadBlog(serviceLocator()))
-    ..registerLazySingleton(() => BlogBloc(serviceLocator()));
+    ..registerFactory(() => GetAllBlogs(serviceLocator()))
+    ..registerLazySingleton(
+      () =>
+          BlogBloc(uploadblog: serviceLocator(), getAllBlogs: serviceLocator()),
+    );
 }

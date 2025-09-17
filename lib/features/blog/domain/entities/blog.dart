@@ -7,6 +7,8 @@ class blog {
   final String imageUrl;
   final List<String> topics;
 
+  final String? posterName;
+
   blog({
     required this.id,
     required this.title,
@@ -15,6 +17,7 @@ class blog {
     required this.updatedAt,
     required this.imageUrl,
     required this.topics,
+    this.posterName,
   });
 
 
