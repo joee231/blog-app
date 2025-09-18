@@ -5,11 +5,11 @@ import 'package:fpdart/fpdart.dart';
 
 import '../repositories/blog_repository.dart';
 
-class GetAllBlogs implements UseCase<List<blog> , noParams>{
+class GetAllBlogs implements UseCase<List<Blog> , noParams>{
   final BlogRepository blogRepository;
   GetAllBlogs(this.blogRepository);
   @override
-  Future<Either<Failure, List<blog>>> call(noParams parameters) async {
+  Future<Either<Failure, List<Blog>>> call(noParams parameters) async {
       return await blogRepository.getAllBlogs();
 
   }

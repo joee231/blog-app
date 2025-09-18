@@ -1,6 +1,6 @@
 import '../../domain/entities/blog.dart';
 
-class BlogModel extends blog {
+class BlogModel extends Blog {
   BlogModel({
     required super.id,
     required super.title,

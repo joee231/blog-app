@@ -16,7 +16,7 @@ class BlogRepositoryImpl implements BlogRepository {
   BlogRepositoryImpl(this.blogRemoteDataSource);
 
   @override
-  Future<Either<Failure, blog>> uploadBlog({
+  Future<Either<Failure, Blog>> uploadBlog({
     required File image,
     required String title,
     required String content,
@@ -48,7 +48,7 @@ class BlogRepositoryImpl implements BlogRepository {
   }
 
   @override
-  Future<Either<Failure, List<blog>>> getAllBlogs() async {
+  Future<Either<Failure, List<Blog>>> getAllBlogs() async {
     try {
       final blogs = await blogRemoteDataSource.getAllBlogs();
       return   Right( blogs);

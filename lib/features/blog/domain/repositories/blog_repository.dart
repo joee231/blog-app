@@ -7,7 +7,7 @@ import '../../../../core/error/failure.dart';
 import '../../data/model/blog_model.dart';
 
 abstract interface class BlogRepository {
-  Future<Either<Failure, blog>> uploadBlog({
+  Future<Either<Failure, Blog>> uploadBlog({
     required File image,
     required String title,
     required String content,
@@ -15,6 +15,6 @@ abstract interface class BlogRepository {
     required List<String> topics,
 });
 
-  Future<Either<Failure, List<blog>>> getAllBlogs();
+  Future<Either<Failure, List<Blog>>> getAllBlogs();
 }
 

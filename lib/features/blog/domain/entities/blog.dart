@@ -1,4 +1,4 @@
-class blog {
+class Blog {
   final String id;
   final String title;
   final String content;
@@ -9,7 +9,7 @@ class blog {
 
   final String? posterName;
 
-  blog({
+  Blog({
     required this.id,
     required this.title,
     required this.content,

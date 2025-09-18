@@ -1,3 +1,4 @@
+import 'package:blogapp/core/themes/app-palette.dart';
 import 'package:blogapp/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blogapp/features/blog/presentation/pages/add_new_blog_page.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/utils/show_snackbar.dart';
+import '../widgets/blog_card.dart';
 
 class BlogPage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (Context) => BlogPage());
@@ -58,9 +60,9 @@ class _BlogPageState extends State<BlogPage> {
                 itemCount: blogs.length,
                 itemBuilder: (context, index) {
                   final blog = blogs[index];
-                  return ListTile(
-                    title: Text(blog.title),
-                    subtitle: Text(blog.content),
+                  return BlogCard(
+                    blog: blog,
+                    color: index % 3 == 0 ? AppPallete.gradient1 : index % 3 == 1 ? AppPallete.gradient2 : AppPallete.gradient3,
                   );
                 },
               );
