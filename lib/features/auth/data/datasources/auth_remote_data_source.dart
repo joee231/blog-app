@@ -34,7 +34,11 @@ class authRemoteDataSourceImpl implements AuthRemoteDataSource {
     throw ServerException(value.toString() ?? 'Something went wrong');
     }
     return UserModel.fromJson(value.user!.toJson());
-    } catch (error) {
+    } on AuthException catch(e)
+     {
+       throw ServerException(e.message);
+     }
+    catch (error) {
     print('Sign up error: $error');
     if (error is AuthException) {
     throw ServerException(error.message);
@@ -63,6 +67,9 @@ class authRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerException(value.toString() ?? 'Something went wrong');
       }
       return UserModel.fromJson(value.user!.toJson());
+    }on AuthException catch(e)
+    {
+      throw ServerException(e.message);
     } catch (error) {
       print('Sign up error: $error');
       if (error is AuthException) {

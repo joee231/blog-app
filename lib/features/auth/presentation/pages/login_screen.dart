@@ -3,6 +3,7 @@ import 'package:blogapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blogapp/features/auth/presentation/pages/signup_screen.dart';
 import 'package:blogapp/features/auth/presentation/widgets/auth_field.dart';
 import 'package:blogapp/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:blogapp/features/blog/presentation/pages/blog_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,6 +43,8 @@ class _LogInScreenState extends State<LogInScreen> {
           {
             if(state is AuthFailure){
               return showSnackbar(context , state.message);
+            } else if (state is AuthSuccess){
+              Navigator.pushAndRemoveUntil(context, BlogPage.route(), (route) => false);
             }
           },
           builder: (context , state )

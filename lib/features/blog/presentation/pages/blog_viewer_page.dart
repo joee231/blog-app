@@ -1,4 +1,5 @@
 import 'package:blogapp/core/themes/app-palette.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/calculate_reading_time.dart';
@@ -54,10 +55,13 @@ class BlogViewerPage extends StatelessWidget {
                 SizedBox(height: 20,),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(blog.imageUrl,
-                  fit: BoxFit.cover,
-                  height: 200,
-                  width: double.infinity,
+                  child: CachedNetworkImage(
+                    imageUrl: blog.imageUrl,
+                    fit: BoxFit.cover,
+                    height: 200,
+                    width: double.infinity,
+                    placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Center(child: Icon(Icons.broken_image, color: Colors.red)),
                   ),
                 ),
                 SizedBox(height: 20,),

@@ -4,10 +4,15 @@ import 'package:blogapp/features/auth/domain/usecases/current_user.dart';
 import 'package:blogapp/features/auth/domain/usecases/user_log_in.dart';
 import 'package:blogapp/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blogapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blogapp/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:blogapp/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/network/connection_checker.dart';
 import 'core/secrets/app_secrets.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/domain/repository/auth_repository.dart';
@@ -26,7 +31,10 @@ Future<void> initDependencies() async {
     url: AppSecrets.supbaseUrl,
     anonKey: AppSecrets.supbaseApiKey,
   );
+  Hive.defaultDirectory =  (await getApplicationDocumentsDirectory()).path ;
   serviceLocator.registerLazySingleton<SupabaseClient>(() => supabase.client);
+  serviceLocator.registerLazySingleton(() => Hive.box(name: 'blogs'));
+  serviceLocator.registerFactory(() => InternetConnection());
 
   serviceLocator.registerLazySingleton(() => AppUserCubit());
   // Bloc/Cubit
@@ -36,6 +44,9 @@ Future<void> initDependencies() async {
   // Repository
 
   // Data sources
+  serviceLocator.registerFactory<ConnectionChecker>(
+    () => ConnectionCheckerImpl(internetConnection: serviceLocator()),
+  );
 }
 
 void _initAuth() {
@@ -44,7 +55,10 @@ void _initAuth() {
       () => authRemoteDataSourceImpl(supabaseClient: serviceLocator()),
     )
     ..registerFactory<AuthRepository>(
-      () => AuthRepositoryImpl(remoteDataSource: serviceLocator()),
+      () => AuthRepositoryImpl(
+        remoteDataSource: serviceLocator(),
+        serviceLocator(),
+      ),
     )
     ..registerFactory(() => UserSignUp(authRepository: serviceLocator()))
     ..registerFactory(() => UserLogin(authRepository: serviceLocator()))
@@ -64,8 +78,9 @@ void _initBlog() {
     ..registerFactory<BlogRemoteDataSource>(
       () => BlogRemoteDataSourceImpl(supabaseClient: serviceLocator()),
     )
+    ..registerFactory<BlogLocalDataSource>(() => BlogLocalDataSourceimpl( serviceLocator()))
     ..registerFactory<BlogRepository>(
-      () => BlogRepositoryImpl(serviceLocator()),
+      () => BlogRepositoryImpl(serviceLocator() , serviceLocator()  , serviceLocator()),
     )
     ..registerFactory(() => uploadBlog(serviceLocator()))
     ..registerFactory(() => GetAllBlogs(serviceLocator()))

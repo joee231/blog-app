@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/pick_image.dart';
 import '../../../../core/utils/show_snackbar.dart';
 import '../bloc/blog_bloc.dart';
@@ -160,16 +161,8 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children:
-                            [
-                                  'technology',
-                                  'business',
-                                  'entertainment',
-                                  'sports',
-                                  'health',
-                                  'programming',
-                                ]
-                                .map(
+                        children: Constants.topics
+                            .map(
                                   (e) => Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: GestureDetector(
